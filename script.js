@@ -1,47 +1,60 @@
-// Assuming you have already fetched and stored your GeoJSON in a variable
-let geojsonData; // Variable to hold GeoJSON data
+// Initialize the map
+const map = L.map('map').setView([31.7917, -7.0926], 5);
 
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// Variable to store GeoJSON data
+let geoJsonData;
+
+// Load GeoJSON for Moroccan regions
 fetch('data/region.geojson')
-    .then(response => response.json())
-    .then(data => {
-        geojsonData = data; // Store the GeoJSON data
-        L.geoJSON(geojsonData, {
-            style: function (feature) {
-                return {
-                    color: '#3388ff',
-                    weight: 2,
-                    opacity: 1,
-                    fillOpacity: 0.5
-                };
-            },
-            onEachFeature: function (feature, layer) {
-                // Bind popup for region name
-                if (feature.properties && feature.properties.Nom_Region) {
-                    layer.bindPopup(feature.properties.Nom_Region);
+  .then(response => response.json())
+  .then(data => {
+    geoJsonData = data; // Store GeoJSON data in a variable
 
-                    // Add to sidebar
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('sidebar-list-item');
-                    listItem.textContent = feature.properties.Nom_Region;
-                    document.getElementById('region-list').appendChild(listItem);
+    const regionLayers = {}; // Object to hold polygon layers
 
-                    // Zoom to region on click
-                    listItem.addEventListener('click', function () {
-                        map.fitBounds(layer.getBounds());
-                    });
+    // Add GeoJSON to map and create a mapping for polygons
+    L.geoJSON(data, {
+      style: function (feature) {
+        return {
+          color: '#3388ff',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.5
+        };
+      },
+      onEachFeature: function (feature, layer) {
+        // Store the layer in the regionLayers object with the region name as key
+        if (feature.properties && feature.properties.Nom_Region) {
+          const regionName = feature.properties.Nom_Region;
+          regionLayers[regionName] = layer; // Map region name to its layer
 
-                    // Change polygon color and image on hover
-                    listItem.addEventListener('mouseenter', function () {
-                        layer.setStyle({ fillColor: 'red' }); // Change polygon color to red
-                        const regionClass = Array.from(listItem.classList).find(cls => !isNaN(cls)); // Get the numeric class
-                        document.querySelector('.img').src = `images/${regionClass}.png`; // Change the image
-                    });
+          // Bind popup for region name
+          layer.bindPopup(regionName);
+        }
+      }
+    }).addTo(map);
 
-                    listItem.addEventListener('mouseleave', function () {
-                        layer.setStyle({ fillColor: '#3388ff' }); // Reset polygon color
-                        document.querySelector('.img').src = 'images/flag.png'; // Reset the image
-                    });
-                }
-            }
-        }).addTo(map);
+    // Add event listeners for the sidebar list items
+    const regionItems = document.querySelectorAll('.region'); // Select all region items
+
+    regionItems.forEach(item => {
+      const regionName = item.textContent; // Get the region name from the <li>
+
+      item.addEventListener('mouseover', () => {
+        if (regionLayers[regionName]) {
+          regionLayers[regionName].setStyle({ fillColor: 'red' }); // Change fill color on hover
+        }
+      });
+
+      item.addEventListener('mouseout', () => {
+        if (regionLayers[regionName]) {
+          regionLayers[regionName].setStyle({ fillColor: '#3388ff' }); // Reset fill color when not hovering
+        }
+      });
     });
+  })
+  .catch(error => console.error('Error loading GeoJSON:', error));
