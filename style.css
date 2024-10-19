@@ -1,10 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
+
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%; /* Ensure the body takes up full height */
   background-color: #1d2634;
-  color: #1212e7;
-  font-family: 'Montserrat', sans-serif;
+  color: #1212e7 ;
+  font-family: 'Poppins', sans-serif;
   overflow: hidden; /* Prevent white space from showing on resizing */
 }
 
@@ -34,11 +37,19 @@ html, body {
   font-weight: 900;
   text-shadow: 10px 10px 10px green;
   border-radius: 10px;
+  cursor: pointer;
+}
+
+.header:hover {
+  background-color: red;
+  color: green;
+  box-shadow: 0 6px 7px -3px rgba(0, 0, 0, 0.5);
+  text-shadow: 10px 10px 10px red;
 }
 
 #sidebar {
   grid-area: sidebar;
-  background-color: rgb(50, 140, 50);
+  background-color: rgb(25, 26, 25);
   font-size: 22px;
   font-weight: bold;
   color: white;
@@ -60,6 +71,7 @@ html, body {
 }
 
 .region {
+  position:relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -67,16 +79,18 @@ html, body {
   font-size: 22px;
   font-weight: bold;
   color: white;
-  background-color: rgb(50, 140, 50);
-  border-bottom: 5px solid red;
+  background-color: rgb(13, 14, 13);
+  border-bottom: 5px ;
   transition: background-color 0.3s ease;
 }
 
 .region:hover {
-  background-color: rgb(144, 167, 144);
-  color: black;
-  cursor:pointer;
+  background-color: rgb(201, 82, 100);
+  color:#111 ;
+  cursor: pointer;
+  left:20px;
 }
+
 
 .region span.material-icons-outlined {
   font-size: 24px;
@@ -84,8 +98,6 @@ html, body {
   margin-right: 15px;
 }
 
-
- 
 .main-container {
   grid-area: main;
   width: 100%;
@@ -93,35 +105,42 @@ html, body {
   padding: 0;
   margin: 0;
   background-color: white;
-  display:grid ; 
-  grid-template-columns:1fr 1fr;
+  display: grid; 
+  gap:10px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows:1fr 1fr;
   grid-template-areas:
-  'map img';
-  height:calc(100vh - 100px );
+   'map img'
+   'chart description';
+  height: calc(100vh - 100px);
 }
 
 #map {
-  grid-area:map;
-  height:100%;
-  width:100%;
+  grid-area: map;
+  height: 100%;
+  width: 100%;
 }
 
 
-.img{
-  grid-area:img;
-  height:100%;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  
+.img {
+  grid-area: img;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-
-
 
 .sidebar-title:hover {
-  background-color: rgb(6, 65, 6);
-  color:red ;
   cursor:pointer;
+}
+canvas {
+  grid-area:chart;
+  width: 100%; /* Full width */
+  height: 100%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+/* Adjust height as needed */
+border:5px solid yellow;
 }

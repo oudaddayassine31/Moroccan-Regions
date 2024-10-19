@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="leaflet/leaflet.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <title>Moroccan Provinces</title>
 </head>
 <body>
@@ -14,7 +16,6 @@
       <span class="material-icons-outlined" style="font-size: 50px;">map</span> 
       Moroccan Regions
     </header>
-
     
     <aside id="sidebar">
       <div class="sidebar-title">
@@ -30,24 +31,22 @@
           <li id="DRAA-TAFILALET" class="region 7">DRAA-TAFILALET</li>
           <li id="SOUSS-MASSA" class="region 8">SOUSS-MASSA</li>
           <li id="GUELMIM-OUED-NOUN" class="region 9">GUELMIM-OUED NOUN</li>
-          <li id="LAAYOUNE-BOUJDOUR-SAKIA-AL-HAMRA 10" class="region">LAAYOUNE-BOUJDOUR-SAKIA AL HAMRA</li>
+          <li id="LAAYOUNE-BOUJDOUR-SAKIA-AL-HAMRA" class="region 10">LAAYOUNE-BOUJDOUR-SAKIA AL HAMRA</li>
           <li id="ED-DAKHLA-OUED-EDDAHAB" class="region 11">ED DAKHLA-OUED EDDAHAB</li>
           <li id="CASABLANCA-SETTAT" class="region 12">CASABLANCA-SETTAT</li>
-       </ul> 
+      </ul> 
     </aside>
+    
     <main class="main-container">
       <div id="map"></div>
       <div class="flag-container">
-        <img src="images\flag.png" alt="Moroccan Flag" class="img">
+        <img src="images/flag.png" alt="Moroccan Flag" class="img">
       </div> 
-      
-      <div id="map"></div>
-    
+      <canvas id="myChart" style="width:100%; height:100%;"></canvas> <!-- Add this line -->
+      <div class="description">Description of Morocco</div>
     </main>
-
-    
-   
   </div>
+
   <script src="leaflet/leaflet.js"></script>
   <script src="script.js"></script>
 </body>

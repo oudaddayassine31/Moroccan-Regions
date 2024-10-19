@@ -1,6 +1,7 @@
-// Initialize the map
+// Initialize the map with Leaflet
 const map = L.map('map').setView([31.7917, -7.0926], 5);
 
+// Load and add the OpenStreetMap tile layer to the map
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -8,53 +9,144 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Variable to store GeoJSON data
 let geoJsonData;
 
-// Load GeoJSON for Moroccan regions
+// Fetch and load the GeoJSON file containing the Moroccan regions
 fetch('data/region.geojson')
   .then(response => response.json())
   .then(data => {
     geoJsonData = data; // Store GeoJSON data in a variable
 
-    const regionLayers = {}; // Object to hold polygon layers
+    const regionLayers = {}; // Object to hold the polygon layers, mapped by region name
+    let currentRegionSelected = null; // Store the currently selected region (by click)
 
-    // Add GeoJSON to map and create a mapping for polygons
+    // Add the GeoJSON to the map and create polygons for each region
     L.geoJSON(data, {
       style: function (feature) {
+        // Define the initial style for each region polygon
         return {
-          color: '#3388ff',
-          weight: 2,
-          opacity: 1,
-          fillOpacity: 0.5
+          color: '#3388ff',  // Border color of the polygon
+          weight: 2,         // Border thickness
+          opacity: 1,        // Border opacity
+          fillOpacity: 0.5   // Polygon fill opacity
         };
       },
       onEachFeature: function (feature, layer) {
-        // Store the layer in the regionLayers object with the region name as key
+        // For each region, map its polygon layer by the region name
         if (feature.properties && feature.properties.Nom_Region) {
           const regionName = feature.properties.Nom_Region;
-          regionLayers[regionName] = layer; // Map region name to its layer
+          regionLayers[regionName] = layer; // Map region name to the polygon layer
 
-          // Bind popup for region name
+          // Bind a popup with the region name to each polygon
           layer.bindPopup(regionName);
         }
       }
     }).addTo(map);
 
-    // Add event listeners for the sidebar list items
-    const regionItems = document.querySelectorAll('.region'); // Select all region items
+    // Log the final content of regionLayers to the console
+    console.log('regionLayers:', regionLayers['BENI MELLAL-KHENIFRA'].feature.properties);
 
+    // Select all region <li> elements from the sidebar
+    const regionItems = document.querySelectorAll('.region');
+    // Select the <img> tag where the Moroccan flag is displayed
+    const flagImage = document.querySelector('.flag-container img');
+    // Select the title elements (clicking on these will reset the flag to the default one)
+    const sidebarTitle = document.querySelector('.sidebar-title');
+    const locationIcon = document.querySelector('.material-icons-outlined');
+    const header = document.querySelector('.header');
+
+    // Chart.js initialization
+    const ctx = document.getElementById('myChart').getContext('2d');
+    let myChart;
+
+    // Helper function to reset the map and image to the default flag
+    function resetToDefaultFlag() {
+      flagImage.src = 'images/flag.png'; // Reset the flag image to the default
+      if (currentRegionSelected) {
+        regionLayers[currentRegionSelected].setStyle({ fillColor: '#3388ff' }); // Reset the previously selected region
+        currentRegionSelected = null; // Clear the selected region
+      }
+      if (myChart) {
+        myChart.destroy(); // Destroy the chart if it exists
+      }
+    }
+
+    // Helper function to create and display the chart
+    function displayChart(regionData) {
+      const { Population, Etrangers, Marocains, Menages, Nom_Region } = regionData;
+
+      if (myChart) {
+        myChart.destroy(); // Destroy previous chart if it exists
+      }
+
+      // Create a new chart
+      myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Population', 'Etrangers', 'Marocains', 'Menages'],
+          datasets: [{
+            label: Nom_Region,
+            data: [Population, Etrangers, Marocains, Menages],
+            backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],
+            borderColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Loop through each region <li> element
     regionItems.forEach(item => {
-      const regionName = item.textContent; // Get the region name from the <li>
+      const regionName = item.textContent; // Get the region name from the <li> text content
+      const regionNumber = item.classList[1]; // Get the region number from the second class (e.g., '1', '2', etc.)
 
+      // Event listener for when the mouse hovers over a region in the sidebar
       item.addEventListener('mouseover', () => {
-        if (regionLayers[regionName]) {
-          regionLayers[regionName].setStyle({ fillColor: 'red' }); // Change fill color on hover
+        if (!currentRegionSelected && regionLayers[regionName]) {
+          // Change the fill color of the corresponding region polygon to red on hover
+          regionLayers[regionName].setStyle({ fillColor: 'red' });
+          // Change the flag image to the region-specific image (e.g., '1.png', '2.png', etc.)
+          flagImage.src = `images/${regionNumber}.png`;
         }
       });
 
+      // Event listener for when the mouse stops hovering over a region in the sidebar
       item.addEventListener('mouseout', () => {
-        if (regionLayers[regionName]) {
-          regionLayers[regionName].setStyle({ fillColor: '#3388ff' }); // Reset fill color when not hovering
+        if (!currentRegionSelected && regionLayers[regionName]) {
+          // Reset the fill color of the polygon to its original color after hover ends
+          regionLayers[regionName].setStyle({ fillColor: '#3388ff' });
+          // Revert the flag image back to the default Moroccan flag
+          flagImage.src = 'images/flag.png';
         }
+      });
+
+      // Event listener for when the user clicks on a region in the sidebar
+      item.addEventListener('click', () => {
+        // If a region was previously selected, reset its color
+        if (currentRegionSelected && regionLayers[currentRegionSelected]) {
+          regionLayers[currentRegionSelected].setStyle({ fillColor: '#3388ff' });
+        }
+
+        // Set the clicked region as the selected region
+        currentRegionSelected = regionName;
+        regionLayers[regionName].setStyle({ fillColor: 'red' }); // Change fill color to red
+        flagImage.src = `images/${regionNumber}.png`; // Persist the flag for the clicked region
+
+        // Fetch region data and display chart
+        const regionData = regionLayers[regionName].feature.properties;
+        displayChart(regionData); // Call function to create the chart
       });
     });
+
+    // Event listener for resetting the flag when the title or location icon is clicked
+    sidebarTitle.addEventListener('click', resetToDefaultFlag);
+    locationIcon.addEventListener('click', resetToDefaultFlag);
+    header.addEventListener('click', resetToDefaultFlag);
   })
-  .catch(error => console.error('Error loading GeoJSON:', error));
+  .catch(error => console.error('Error loading GeoJSON:', error)); // Handle errors during GeoJSON loading
