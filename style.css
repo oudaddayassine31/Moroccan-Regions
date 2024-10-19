@@ -88,7 +88,6 @@ html, body {
   background-color: rgb(201, 82, 100);
   color:#111 ;
   cursor: pointer;
-  left:20px;
 }
 
 
@@ -111,7 +110,7 @@ html, body {
   grid-template-rows:1fr 1fr;
   grid-template-areas:
    'map img'
-   'chart description';
+   'map description';
   height: calc(100vh - 100px);
 }
 
@@ -133,14 +132,4 @@ html, body {
 
 .sidebar-title:hover {
   cursor:pointer;
-}
-canvas {
-  grid-area:chart;
-  width: 100%; /* Full width */
-  height: 100%; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-/* Adjust height as needed */
-border:5px solid yellow;
 }

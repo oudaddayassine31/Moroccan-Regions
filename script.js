@@ -54,8 +54,7 @@ fetch('data/region.geojson')
     const header = document.querySelector('.header');
 
     // Chart.js initialization
-    const ctx = document.getElementById('myChart').getContext('2d');
-    let myChart;
+    
 
     // Helper function to reset the map and image to the default flag
     function resetToDefaultFlag() {
@@ -64,42 +63,11 @@ fetch('data/region.geojson')
         regionLayers[currentRegionSelected].setStyle({ fillColor: '#3388ff' }); // Reset the previously selected region
         currentRegionSelected = null; // Clear the selected region
       }
-      if (myChart) {
-        myChart.destroy(); // Destroy the chart if it exists
-      }
+      
     }
 
     // Helper function to create and display the chart
-    function displayChart(regionData) {
-      const { Population, Etrangers, Marocains, Menages, Nom_Region } = regionData;
-
-      if (myChart) {
-        myChart.destroy(); // Destroy previous chart if it exists
-      }
-
-      // Create a new chart
-      myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Population', 'Etrangers', 'Marocains', 'Menages'],
-          datasets: [{
-            label: Nom_Region,
-            data: [Population, Etrangers, Marocains, Menages],
-            backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],
-            borderColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    }
+   
 
     // Loop through each region <li> element
     regionItems.forEach(item => {
@@ -139,8 +107,7 @@ fetch('data/region.geojson')
         flagImage.src = `images/${regionNumber}.png`; // Persist the flag for the clicked region
 
         // Fetch region data and display chart
-        const regionData = regionLayers[regionName].feature.properties;
-        displayChart(regionData); // Call function to create the chart
+        // Call function to create the chart
       });
     });
 
