@@ -33,6 +33,12 @@ header:hover {
   color: green;
   text-shadow: 10px 10px 10px red;
 }
+.reset-btn:hover{
+  background-color: rgb(19, 20, 18);
+  color: green;
+  text-shadow: 10px 10px 10px red;
+
+}
 
 .container {
   display: grid;
@@ -97,3 +103,34 @@ main {
     overflow-y: scroll;
   }
 }
+/* Click to zoom indication style */
+.click {
+  background-color: red;        /* Strong background color to stand out */
+  color: white;                 /* Text color for good contrast */
+  font-size: 1.2rem;            /* Larger font size to make it more noticeable */
+  text-align: center;           /* Center the text inside the element */
+  padding: 10px;                /* Add padding around the text */
+  margin: 10px 0;               /* Space it out from other elements */
+  border-radius: 8px;           /* Rounded corners for a modern look */
+  border: 2px solid white;      /* White border to emphasize the element */
+  font-weight: bold;            /* Make the text bold for extra emphasis */
+  cursor: not-allowed;              /* Change cursor to pointer to indicate it's clickable */
+  transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+}
+
+/* Hover effect to make it interactive */
+/* Style for the reset button */
+.reset-btn {
+  background-color: #e82517; /* Red background color to indicate action */
+  color: rgb(45, 91, 11);             /* White text for contrast */
+  font-size: 16px;          /* Medium font size */
+  padding: 10px 20px;       /* Padding around the text */
+  margin: 10px;         /* Space above the button */
+  border: none;             /* Remove default border */
+  border-radius: 5px;       /* Rounded corners for a modern look */
+  cursor: pointer;          /* Pointer cursor to indicate it's clickable */
+  transition: background-color 0.3s, transform 0.3s;
+  font-weight:800; /* Smooth hover and click effects */
+}
+
+

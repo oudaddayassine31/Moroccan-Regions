@@ -43,28 +43,20 @@ fetch('data/region.geojson')
 
     // Select all region <li> elements from the sidebar
     const regionItems = document.querySelectorAll('.region');
-    console.log(regionLayers)
-    
 
-    const header = document.querySelector('header');
-
-
+    const header = document.getElementById('reset-button')
+    // Helper function to reset the selected region
     function resetToDefaultFlag() {
-
       if (currentRegionSelected) {
         regionLayers[currentRegionSelected].setStyle({ fillColor: '#3388ff' }); // Reset the previously selected region
-        currentRegionSelected = null; // Clear the selected region
+        currentRegionSelected = null;
+        map.setView([31.7917, -7.0926], 5) // Clear the selected region
       }
-      
     }
-
-    // Helper function to create and display the chart
-   
 
     // Loop through each region <li> element
     regionItems.forEach(item => {
       const regionName = item.textContent; // Get the region name from the <li> text content
-      const regionNumber = item.classList[1]; // Get the region number from the second class (e.g., '1', '2', etc.)
 
       // Event listener for when the mouse hovers over a region in the sidebar
       item.addEventListener('mouseover', () => {
@@ -79,7 +71,6 @@ fetch('data/region.geojson')
         if (!currentRegionSelected && regionLayers[regionName]) {
           // Reset the fill color of the polygon to its original color after hover ends
           regionLayers[regionName].setStyle({ fillColor: '#3388ff' });
-     ;
         }
       });
 
@@ -93,14 +84,40 @@ fetch('data/region.geojson')
         // Set the clicked region as the selected region
         currentRegionSelected = regionName;
         regionLayers[regionName].setStyle({ fillColor: 'red' }); // Change fill color to red
-  
 
-        // Fetch region data and display chart
-        // Call function to create the chart
+        // Retrieve the polygon's geometry and calculate its centroid
+        const regionGeometry = regionLayers[regionName].feature.geometry;
+
+        // Calculate centroid using the coordinates
+        const coordinates = regionGeometry.coordinates;
+        const centroid = getCentroid(coordinates);
+
+        // Set the map view to the calculated centroid and zoom level 9
+        map.setView([centroid[1], centroid[0]], 7);
       });
     });
 
-    
+    // Function to calculate the centroid of a polygon
+    function getCentroid(coords) {
+      let lat = 0, lng = 0, n = 0;
+
+      // For MultiPolygon (regions made up of multiple polygons)
+      coords.forEach(polygon => {
+        polygon[0].forEach(point => {
+          lng += point[0];
+          lat += point[1];
+          n++;
+        });
+      });
+
+      // Return the average of the coordinates as the centroid
+      return [lng / n, lat / n];
+    }
+
     header.addEventListener('click', resetToDefaultFlag);
+     
   })
-  .catch(error => console.error('Error loading GeoJSON:', error)); // Handle errors during GeoJSON loading
+  .catch(error => console.error('Error loading GeoJSON:', error));
+// Assuming you have a map object (Leaflet or other map library)
+
+
