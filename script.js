@@ -41,24 +41,16 @@ fetch('data/region.geojson')
       }
     }).addTo(map);
 
-    // Log the final content of regionLayers to the console
-    console.log('regionLayers:', regionLayers['BENI MELLAL-KHENIFRA'].feature.properties);
-
     // Select all region <li> elements from the sidebar
     const regionItems = document.querySelectorAll('.region');
-    // Select the <img> tag where the Moroccan flag is displayed
-    const flagImage = document.querySelector('.flag-container img');
-    // Select the title elements (clicking on these will reset the flag to the default one)
-    const sidebarTitle = document.querySelector('.sidebar-title');
-    const locationIcon = document.querySelector('.material-icons-outlined');
-    const header = document.querySelector('.header');
-
-    // Chart.js initialization
+    console.log(regionLayers)
     
 
-    // Helper function to reset the map and image to the default flag
+    const header = document.querySelector('header');
+
+
     function resetToDefaultFlag() {
-      flagImage.src = 'images/flag.png'; // Reset the flag image to the default
+
       if (currentRegionSelected) {
         regionLayers[currentRegionSelected].setStyle({ fillColor: '#3388ff' }); // Reset the previously selected region
         currentRegionSelected = null; // Clear the selected region
@@ -79,8 +71,6 @@ fetch('data/region.geojson')
         if (!currentRegionSelected && regionLayers[regionName]) {
           // Change the fill color of the corresponding region polygon to red on hover
           regionLayers[regionName].setStyle({ fillColor: 'red' });
-          // Change the flag image to the region-specific image (e.g., '1.png', '2.png', etc.)
-          flagImage.src = `images/${regionNumber}.png`;
         }
       });
 
@@ -89,8 +79,7 @@ fetch('data/region.geojson')
         if (!currentRegionSelected && regionLayers[regionName]) {
           // Reset the fill color of the polygon to its original color after hover ends
           regionLayers[regionName].setStyle({ fillColor: '#3388ff' });
-          // Revert the flag image back to the default Moroccan flag
-          flagImage.src = 'images/flag.png';
+     ;
         }
       });
 
@@ -104,16 +93,14 @@ fetch('data/region.geojson')
         // Set the clicked region as the selected region
         currentRegionSelected = regionName;
         regionLayers[regionName].setStyle({ fillColor: 'red' }); // Change fill color to red
-        flagImage.src = `images/${regionNumber}.png`; // Persist the flag for the clicked region
+  
 
         // Fetch region data and display chart
         // Call function to create the chart
       });
     });
 
-    // Event listener for resetting the flag when the title or location icon is clicked
-    sidebarTitle.addEventListener('click', resetToDefaultFlag);
-    locationIcon.addEventListener('click', resetToDefaultFlag);
+    
     header.addEventListener('click', resetToDefaultFlag);
   })
   .catch(error => console.error('Error loading GeoJSON:', error)); // Handle errors during GeoJSON loading

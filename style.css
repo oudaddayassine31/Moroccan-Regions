@@ -1,30 +1,17 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
-
-
-html, body {
+* {
   margin: 0;
   padding: 0;
-  height: 100%; /* Ensure the body takes up full height */
-  background-color: #1d2634;
-  color: #1212e7 ;
-  font-family: 'Poppins', sans-serif;
-  overflow: hidden; /* Prevent white space from showing on resizing */
+  box-sizing: border-box;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-template-rows: 100px auto; 
-  grid-template-areas: 
-    'sidebar header header header'
-    'sidebar main main main';
-  height: 100vh; 
-  width: 100vw; 
-  overflow: hidden; 
+body {
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.header {
-  grid-area: header;
+header {
   background-color: rgb(13, 80, 13);
   height: 100px;
   display: flex;
@@ -33,103 +20,80 @@ html, body {
   padding: 0 30px;
   box-shadow: 0 6px 7px -3px rgba(0, 0, 0, 0.5);
   color: red;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 900;
   text-shadow: 10px 10px 10px green;
   border-radius: 10px;
   cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.header:hover {
+header:hover {
   background-color: red;
   color: green;
-  box-shadow: 0 6px 7px -3px rgba(0, 0, 0, 0.5);
   text-shadow: 10px 10px 10px red;
 }
 
-#sidebar {
-  grid-area: sidebar;
-  background-color: rgb(25, 26, 25);
+.container {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-template-areas:
+    "aside main"; /* Grid layout where sidebar and map are in the same row */
+  height: calc(100vh - 100px); /* Full height minus header */
+}
+
+aside {
+  grid-area: aside;
+  background-color: #160a0a;
+  overflow-y: auto;
   font-size: 22px;
-  font-weight: bold;
   color: white;
+  font-weight: bold;
+  height:100vh;
 }
 
-.sidebar-title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  margin: 15px;
-  font-size: 25px;
-}
-
-.sidebar-list {
-  padding: 0;
-  margin-top: 15px;
-  list-style-type: none;
+#region-list {
+  list-style: none;
+  padding: 1rem;
 }
 
 .region {
-  position:relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  font-size: 22px;
-  font-weight: bold;
-  color: white;
-  background-color: rgb(13, 14, 13);
-  border-bottom: 5px ;
-  transition: background-color 0.3s ease;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .region:hover {
   background-color: rgb(201, 82, 100);
-  color:#111 ;
-  cursor: pointer;
+  color: #111;
 }
 
-
-.region span.material-icons-outlined {
-  font-size: 24px;
-  color: red;
-  margin-right: 15px;
-}
-
-.main-container {
+main {
   grid-area: main;
-  width: 100%;
-  height: 100%; 
-  padding: 0;
-  margin: 0;
-  background-color: white;
-  display: grid; 
-  gap:10px;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows:1fr 1fr;
-  grid-template-areas:
-   'map img'
-   'map description';
-  height: calc(100vh - 100px);
-}
-
-#map {
-  grid-area: map;
-  height: 100%;
-  width: 100%;
-}
-
-
-.img {
-  grid-area: img;
-  height: 100%;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
 }
 
-.sidebar-title:hover {
-  cursor:pointer;
+#map {
+  width: 100%;
+  height: 100%;
+  background-color: #eaeaea;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "aside"
+      "main";
+  }
+
+  aside {
+    max-height: 200px;
+    overflow-y: scroll;
+  }
 }

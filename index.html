@@ -1,51 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="leaflet/leaflet.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <title>Moroccan Provinces</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moroccan Regions Map</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="leaflet/leaflet.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 </head>
 <body>
-  <div class="grid-container">
-    <header class="header">
-      <span class="material-icons-outlined" style="font-size: 50px;">map</span> 
-      Moroccan Regions
+    <header>
+        <h1>
+            <span class="material-icons-outlined" style="font-size: 50px;">map</span>
+            Moroccan Regions
+        </h1>
     </header>
-    
-    <aside id="sidebar">
-      <div class="sidebar-title">
-          <span class="material-icons-outlined" class="ana">place</span> Regions
-      </div>
-      <ul class="sidebar-list" id="region-list">
-          <li id="TANGER-TETOUAN-AL-HOCEIMA" class="region 1">TANGER-TETOUAN-AL HOCEIMA</li>
-          <li id="ORIENTAL-RIF" class="region 2">ORIENTAL-RIF</li>
-          <li id="FES-MEKNES" class="region 3">FES-MEKNES</li>
-          <li id="RABAT-SALE-KENITRA" class="region 4">RABAT-SALE-KENITRA</li>
-          <li id="BENI-MELLAL-KHENIFRA" class="region 5">BENI MELLAL-KHENIFRA</li>
-          <li id="MARRAKECH-SAFI" class="region 6">MARRAKECH-SAFI</li>
-          <li id="DRAA-TAFILALET" class="region 7">DRAA-TAFILALET</li>
-          <li id="SOUSS-MASSA" class="region 8">SOUSS-MASSA</li>
-          <li id="GUELMIM-OUED-NOUN" class="region 9">GUELMIM-OUED NOUN</li>
-          <li id="LAAYOUNE-BOUJDOUR-SAKIA-AL-HAMRA" class="region 10">LAAYOUNE-BOUJDOUR-SAKIA AL HAMRA</li>
-          <li id="ED-DAKHLA-OUED-EDDAHAB" class="region 11">ED DAKHLA-OUED EDDAHAB</li>
-          <li id="CASABLANCA-SETTAT" class="region 12">CASABLANCA-SETTAT</li>
-      </ul> 
-    </aside>
-    
-    <main class="main-container">
-      <div id="map"></div>
-      <div class="flag-container">
-        <img src="images/flag.png" alt="Moroccan Flag" class="img">
-      </div> 
-    </main>
-  </div>
+    <div class="container">
+        <aside>
+            <ul id="region-list">
+              <li id="TANGER-TETOUAN-AL-HOCEIMA" class="region 1">TANGER-TETOUAN-AL HOCEIMA</li>
+              <li id="ORIENTAL-RIF" class="region 2">ORIENTAL-RIF</li>
+              <li id="FES-MEKNES" class="region 3">FES-MEKNES</li>
+              <li id="RABAT-SALE-KENITRA" class="region 4">RABAT-SALE-KENITRA</li>
+              <li id="BENI-MELLAL-KHENIFRA" class="region 5">BENI MELLAL-KHENIFRA</li>
+              <li id="MARRAKECH-SAFI" class="region 6">MARRAKECH-SAFI</li>
+              <li id="DRAA-TAFILALET" class="region 7">DRAA-TAFILALET</li>
+              <li id="SOUSS-MASSA" class="region 8">SOUSS-MASSA</li>
+              <li id="GUELMIM-OUED-NOUN" class="region 9">GUELMIM-OUED NOUN</li>
+              <li id="LAAYOUNE-BOUJDOUR-SAKIA-AL-HAMRA" class="region 10">LAAYOUNE-BOUJDOUR-SAKIA AL HAMRA</li>
+              <li id="ED-DAKHLA-OUED-EDDAHAB" class="region 11">ED DAKHLA-OUED EDDAHAB</li>
+              <li id="CASABLANCA-SETTAT" class="region 12">CASABLANCA-SETTAT</li>
+            </ul>
+        </aside>
 
-  <script src="leaflet/leaflet.js"></script>
-  <script src="script.js"></script>
+        <main>
+            <div id="map" style="height: 500px;"></div> <!-- Set a height for the map -->
+
+        </main>
+    </div>
+    <script src="leaflet/leaflet.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
