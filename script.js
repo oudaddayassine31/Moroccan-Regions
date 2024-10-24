@@ -13,7 +13,7 @@ let geoJsonData;
 fetch('data/region.geojson')
   .then(response => response.json())
   .then(data => {
-    geoJsonData = data; // Store GeoJSON data in a variable
+    geoJsonData = data; // Assign the data to the global geoJsonData variable
 
     const regionLayers = {}; // Object to hold the polygon layers, mapped by region name
     let currentRegionSelected = null; // Store the currently selected region (by click)
@@ -41,16 +41,64 @@ fetch('data/region.geojson')
       }
     }).addTo(map);
 
+    function getColor(d) {
+      return d > 5000000 ? '#800026' :    // Plus de 5 000 000
+             d > 3000000 ? '#BD0026' :    // Plus de 3 000 000
+             d > 1000000 ? '#E31A1C' :    // Plus de 1 000 000
+             d > 500000  ? '#FC4E2A' :    // Plus de 500 000
+             d > 100000  ? '#FD8D3C' :    // Plus de 100 000
+             d > 50000   ? '#FEB24C' :    // Plus de 50 000
+                            '#FFEDA0';    // Moins de 50 000
+    }
+
+    function style(feature) {
+      return {
+        fillColor: getColor(feature.properties.Population),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+      };
+    }
+
+    const populations = geoJsonData.features.map(feature => feature.properties.Population);
+
+    const minPopulation = Math.min(...populations);
+    const maxPopulation = Math.max(...populations);
+
+    console.log("Population minimale:", minPopulation);
+    console.log("Population maximale:", maxPopulation);
+
+    L.choropleth(geoJsonData, {
+      valueProperty: 'Population', // Use the 'Population' property in the features
+      scale: ['#FFEDA0', '#800026'], // Define the color scale from light yellow to dark red
+      steps: 7, // Number of color steps (adjustable as needed)
+      mode: 'q', // Quantile mode to distribute the population values
+      style: {
+        color: '#fff', // Border color
+        weight: 2, // Border thickness
+        fillOpacity: 0.8 // Fill opacity
+      },
+      onEachFeature: function(feature, layer) {
+        // Bind a popup with population details
+        if (feature.properties && feature.properties.Population) {
+          layer.bindPopup('Population: ' + feature.properties.Population);
+        }
+      }
+    }).addTo(map);
+
     // Select all region <li> elements from the sidebar
     const regionItems = document.querySelectorAll('.region');
 
-    const header = document.getElementById('reset-button')
+    const header = document.getElementById('reset-button');
+    
     // Helper function to reset the selected region
     function resetToDefaultFlag() {
       if (currentRegionSelected) {
         regionLayers[currentRegionSelected].setStyle({ fillColor: '#3388ff' }); // Reset the previously selected region
         currentRegionSelected = null;
-        map.setView([31.7917, -7.0926], 5) // Clear the selected region
+        map.setView([31.7917, -7.0926], 5); // Clear the selected region
       }
     }
 
@@ -83,7 +131,7 @@ fetch('data/region.geojson')
 
         // Set the clicked region as the selected region
         currentRegionSelected = regionName;
-        regionLayers[regionName].setStyle({ fillColor: 'red' }); // Change fill color to red
+        regionLayers[regionName].setStyle({ fillColor: 'black' }); // Change fill color to red
 
         // Retrieve the polygon's geometry and calculate its centroid
         const regionGeometry = regionLayers[regionName].feature.geometry;
@@ -92,7 +140,7 @@ fetch('data/region.geojson')
         const coordinates = regionGeometry.coordinates;
         const centroid = getCentroid(coordinates);
 
-        // Set the map view to the calculated centroid and zoom level 9
+        // Set the map view to the calculated centroid and zoom level 7
         map.setView([centroid[1], centroid[0]], 7);
       });
     });
@@ -115,9 +163,5 @@ fetch('data/region.geojson')
     }
 
     header.addEventListener('click', resetToDefaultFlag);
-     
   })
   .catch(error => console.error('Error loading GeoJSON:', error));
-// Assuming you have a map object (Leaflet or other map library)
-
-

@@ -125,7 +125,7 @@ main {
   color: rgb(45, 91, 11);             /* White text for contrast */
   font-size: 16px;          /* Medium font size */
   padding: 10px 20px;       /* Padding around the text */
-  margin: 10px;         /* Space above the button */
+  margin-left: 40px;         /* Space above the button */
   border: none;             /* Remove default border */
   border-radius: 5px;       /* Rounded corners for a modern look */
   cursor: pointer;          /* Pointer cursor to indicate it's clickable */
